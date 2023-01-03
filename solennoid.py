@@ -9,8 +9,8 @@ import argparse
 parser = argparse.ArgumentParser(description='SOLeNNoID script for solenoid residue prediction. Please provide a structure using the -i flag. Predictions are output either in a .csv file, or a .pdb file with b factors replaced with solenoid class numerical values. 1 - beta-solenoid, 2 - alpha/beta-solenoid, 3 - alpha-solenoid.')
 # Adding optional argument
 parser.add_argument("-i", "--Input", help = "Input file")
-parser.add_argument("-csv","--Csv",choices=['Y','N'],help='Output csv with predictions')
-parser.add_argument('-pdb','--Pdb',choices=['Y','N'],help='Output PDB file with predictions as b factors')
+parser.add_argument("-csv","--Csv",action='store_true',help='Output csv with predictions')
+parser.add_argument('-pdb','--Pdb',action='store_true',help='Output PDB file with predictions as b factors')
 args = parser.parse_args()
 structure_path=args.Input
 
@@ -81,10 +81,10 @@ def output_predictions(structure_path):
     io=PDBIO()
     io.set_structure(structure)
 
-    if args.Csv=='Y':
+    if args.Csv:
         total_df.to_csv(f"{structure_path[0:-4]}_predictions.csv")
 
-    if args.Pdb=='Y':
+    if args.Pdb:
         io.save(f"{structure_path[0:-4]}_predictions.pdb")
         print('USE THIS PYMOL SCRIPT TO COLOUR BY SOLENOID CLASS:')
         print('spectrum b, grey_magenta_cyan_orange, minimum=0,maximum=3')
